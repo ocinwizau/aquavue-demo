@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Vue Beachfront Cafe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 168, 232, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        #chatbot-toggle:hover { transform: scale(1.1); }
+        
+        #chatbot-toggle svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        
+        #chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: #0d0d1a;
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #2d2d44;
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            padding: 20px;
+            color: white;
+        }
+        
+        .chat-header h3 { font-size: 18px; margin-bottom: 5px; }
+        .chat-header p { font-size: 12px; opacity: 0.8; }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .bot-message {
+            background: #1c1c2e;
+            color: #f1f5f9;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quick-reply {
+            background: rgba(0, 168, 232, 0.2);
+            color: #00a8e8;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid #00a8e8;
+            transition: all 0.2s;
+        }
+        
+        .quick-reply:hover {
+            background: #00a8e8;
+            color: white;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            background: #161625;
+            border-top: 1px solid #2d2d44;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: #0d0d1a;
+            border: 1px solid #2d2d44;
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .chat-input input:focus {
+            border-color: #00a8e8;
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: #1c1c2e;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00a8e8;
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        @media (max-width: 420px) {
+            #chatbot-window {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Toggle Button -->
+    <div id="chatbot-toggle" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    </div>
+    
+    <!-- Chat Window -->
+    <div id="chatbot-window">
+        <div class="chat-header">
+            <h3>🌊 Aqua Vue Cafe</h3>
+            <p>Hervey Bay's Beachfront Eatery</p>
+        </div>
+        
+        <div class="chat-messages" id="messages">
+            <div class="message bot-message">
+                👋 Welcome to Aqua Vue! 🐋
+                
+                <br><br>Hervey Bay's favourite beachfront cafe ☕🌊
+
+<br><br><strong>How can I help you today?</strong>
+                
+                <div class="quick-replies">
+                    <span class="quick-reply" onclick="sendMessage('Hours')">🕐 Hours</span>
+                    <span class="quick-reply" onclick="sendMessage('Menu')">🍽️ Menu</span>
+                    <span class="quick-reply" onclick="sendMessage('Book a Table')">📋 Book Table</span>
+                    <span class="quick-reply" onclick="sendMessage('Location')">📍 Location</span>
+                    <span class="quick-reply" onclick="sendMessage('Contact')">📞 Contact</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing">
+            <span></span><span></span><span></span>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Ask us anything..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendUserMessage()">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== AQUA VUE CONFIGURATION ===== //
+        const businessConfig = {
+            name: "Aqua Vue Beachfront Bar & Eatery",
+            hours: "6:30am - Midnight, 7 days a week",
+            phone: "07 4125 5528",
+            email: "team@aquavue.com.au",
+            address: "415A Esplanade, Torquay, Hervey Bay QLD",
+            menuLink: "https://www.aquavue.com.au/",
+            bookingLink: "https://www.opentable.com.au/r/aquavue-cafe-restaurant-hervey-bay",
+            services: ["Breakfast", "Lunch", "Dinner", "Beachfront Dining", "Functions & Events", "Watersports"],
+            faqs: {
+                "open": "We're open 6:30am - Midnight, 7 days a week! ☀️",
+                "hours": "🕐 We're open 6:30am - Midnight, 7 days a week!",
+                "location": "📍 We're at 415A Esplanade, Torquay — beachfront! 🌊",
+                "book": "🍽️ For bookings, use OpenTable or call us on 07 4125 5528",
+                "menu": "🍽️ Check our menu here: https://www.aquavue.com.au/",
+                "vegan": "Yes! We cater for gluten free, vegetarian & vegan diets ✅",
+                "kids": "Kids welcome! We have a dedicated kids menu 👶",
+                "parking": "Free parking available on-site 🚗",
+                "wifi": "Yes! Free WiFi for customers 📶",
+                "dogs": "🐕 Well-behaved dogs welcome on lead in outdoor areas!",
+                "function": "Yes! We cater for functions & events. Call us to discuss 📞"
+            }
+        };
+        // ================================== //
+        
+        let chatOpen = false;
+        
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatbot-window').style.display = chatOpen ? 'flex' : 'none';
+        }
+        
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendUserMessage();
+        }
+        
+        function sendMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = text;
+            messagesDiv.appendChild(userMsg);
+            
+            document.getElementById('typing').style.display = 'block';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            setTimeout(() => {
+                document.getElementById('typing').style.display = 'none';
+                getAIResponse(text);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 800);
+        }
+        
+        function sendUserMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (text) {
+                sendMessage(text);
+                input.value = '';
+            }
+        }
+        
+        function getAIResponse(userText) {
+            const messagesDiv = document.getElementById('messages');
+            const lowerText = userText.toLowerCase();
+            let response = "";
+            let showBooking = false;
+            
+            // Check FAQ matches
+            for (const [key, value] of Object.entries(businessConfig.faqs)) {
+                if (lowerText.includes(key)) {
+                    response = value;
+                    if (key === 'book' || lowerText.includes('book')) showBooking = true;
+                    break;
+                }
+            }
+            
+            // Default responses
+            if (!response) {
+                if (lowerText.includes('hour') || lowerText.includes('open') || lowerText.includes('time') || lowerText.includes('close')) {
+                    response = businessConfig.faqs.hours;
+                } else if (lowerText.includes('menu') || lowerText.includes('eat') || lowerText.includes('food') || lowerText.includes('breakfast') || lowerText.includes('lunch') || lowerText.includes('dinner')) {
+                    response = businessConfig.faqs.menu + "<br><br>🍳 Breakfast: from 6:30am<br>🍽️ Lunch & Dinner: all day";
+                } else if (lowerText.includes('book') || lowerText.includes('table') || lowerText.includes('reservation')) {
+                    response = "🍽️ Great choice! Book online: " + businessConfig.bookingLink + "<br><br>Or call us: " + businessConfig.phone;
+                } else if (lowerText.includes('contact') || lowerText.includes('call') || lowerText.includes('phone') || lowerText.includes('address') || lowerText.includes('where')) {
+                    response = "📞 " + businessConfig.phone + "<br>📧 " + businessConfig.email + "<br>📍 " + businessConfig.address;
+                } else if (lowerText.includes('location') || lowerText.includes('address') || lowerText.includes('where')) {
+                    response = businessConfig.faqs.location + "<br><br><a href='https://maps.google.com/?q=Aqua+Vue+Hervey+Bay' target='_blank' style='color:#00a8e8'>📍 Open in Google Maps</a>";
+                } else if (lowerText.includes('vegan') || lowerText.includes('vegetarian') || lowerText.includes('gluten') || lowerText.includes('diet')) {
+                    response = "Yes absolutely! We cater for gluten free, vegetarian & vegan ✅";
+                } else if (lowerText.includes('kids') || lowerText.includes('family') || lowerText.includes('children')) {
+                    response = "👶 Kids are welcome! We have a dedicated kids menu available";
+                } else if (lowerText.includes('dog') || lowerText.includes('pet')) {
+                    response = businessConfig.faqs.dogs;
+                } else if (lowerText.includes('function') || lowerText.includes('event') || lowerText.includes('party') || lowerText.includes('wedding')) {
+                    response = "Yes we do functions & events! 📞 Call us on " + businessConfig.phone + " to discuss your requirements";
+                } else if (lowerText.includes('thank')) {
+                    response = "😊 Thank you! See you soon at Aqua Vue! 🌊";
+                } else if (lowerText.includes('bye') || lowerText.includes('goodbye')) {
+                    response = "👋 Thanks for chatting! See you at the beach! 🐋";
+                } else {
+                    response = "🤔 Let me help! You can ask about our hours, menu, location, or make a booking. 😊";
+                }
+            }
+            
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot-message';
+            botMsg.innerHTML = response;
+            
+            // Add quick actions
+            const qrDiv = document.createElement('div');
+            qrDiv.className = 'quick-replies';
+            qrDiv.style.marginTop = '15px';
+            
+            const quickActions = [
+                { label: '🕐 Hours', action: 'Hours' },
+                { label: '📋 Book', action: 'Book a Table' },
+                { label: '🍽️ Menu', action: 'Menu' }
+            ];
+            
+            quickActions.forEach(qr => {
+                const span = document.createElement('span');
+                span.className = 'quick-reply';
+                span.textContent = qr.label;
+                span.onclick = () => sendMessage(qr.action);
+                qrDiv.appendChild(span);
+            });
+            
+            botMsg.appendChild(qrDiv);
+            messagesDiv.appendChild(botMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
