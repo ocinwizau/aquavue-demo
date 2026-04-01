@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Vue Beachfront Cafe</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 168, 232, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        #chatbot-toggle:hover { transform: scale(1.1); }
+        
+        #chatbot-toggle svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        
+        #chatbot-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 380px;
+            height: 520px;
+            background: #0d0d1a;
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #2d2d44;
+            z-index: 1000;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            padding: 15px 20px;
+            color: white;
+        }
+        
+        .chat-header h3 { font-size: 18px; margin-bottom: 5px; }
+        .chat-header p { font-size: 12px; opacity: 0.8; }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .bot-message {
+            background: #1c1c2e;
+            color: #f1f5f9;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        
+        .quick-reply {
+            background: rgba(0, 168, 232, 0.15);
+            color: #00a8e8;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid #00a8e8;
+            transition: all 0.2s;
+        }
+        
+        .quick-reply:hover {
+            background: #00a8e8;
+            color: white;
+        }
+        
+        .menu-section {
+            background: rgba(0, 168, 232, 0.1);
+            border: 1px solid #00a8e8;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 8px;
+        }
+        
+        .menu-section h4 {
+            color: #00a8e8;
+            font-size: 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #00a8e8;
+            padding-bottom: 5px;
+        }
+        
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 12px;
+        }
+        
+        .menu-item .price {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .chat-input {
+            padding: 12px;
+            background: #161625;
+            border-top: 1px solid #2d2d44;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            background: #0d0d1a;
+            border: 1px solid #2d2d44;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-size: 13px;
+            outline: none;
+        }
+        
+        .chat-input input:focus {
+            border-color: #00a8e8;
+        }
+        
+        .chat-input button {
+            background: linear-gradient(135deg, #00a8e8, #007ea7);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input button svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+        
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: #1c1c2e;
+            border-radius: 15px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #00a8e8;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        @media (max-width: 420px) {
+            #chatbot-window {
+                width: calc(100% - 30px);
+                right: 15px;
+                left: 15px;
+                height: calc(100vh - 120px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbot-toggle" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    </div>
+    
+    <div id="chatbot-window">
+        <div class="chat-header">
+            <h3>🌊 Aqua Vue Cafe</h3>
+            <p>Hervey Bay's Beachfront Eatery</p>
+        </div>
+        
+        <div class="chat-messages" id="messages">
+            <div class="message bot-message">
+                👋 Welcome to Aqua Vue! 🐋
+                <br><br>Hervey Bay's favourite beachfront cafe ☕🌊
+                <br><br><strong>How can I help?</strong>
+                
+                <div class="quick-replies">
+                    <span class="quick-reply" onclick="sendMessage('Hours')">🕐 Hours</span>
+                    <span class="quick-reply" onclick="sendMessage('Menu')">🍽️ Menu</span>
+                    <span class="quick-reply" onclick="sendMessage('Book')">📋 Book</span>
+                    <span class="quick-reply" onclick="sendMessage('Location')">📍 Location</span>
+                    <span class="quick-reply" onclick="sendMessage('Breakfast')">🍳 Breakfast</span>
+                    <span class="quick-reply" onclick="sendMessage('Lunch')">🥗 Lunch</span>
+                    <span class="quick-reply" onclick="sendMessage('Coffee')">☕ Coffee</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing">
+            <span></span><span></span><span></span>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Ask about menu..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendUserMessage()">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const businessConfig = {
+            name: "Aqua Vue Beachfront Bar & Eatery",
+            hours: "6:30am - Midnight, 7 days",
+            phone: "07 4125 5528",
+            email: "team@aquavue.com.au",
+            address: "415A Esplanade, Torquay, Hervey Bay",
+            bookingLink: "https://www.opentable.com.au/r/aquavue-cafe-restaurant-hervey-bay",
+            
+            // FULL MENU INTEGRATED
+            menu: {
+                breakfast: [
+                    { name: "Big Breakfast", price: "$22.90", desc: "Eggs, bacon, sausage, toast, tomato" },
+                    { name: "Avocado Smash", price: "$18.90", desc: "Sourdough, tomato, feta, chili" },
+                    { name: "Pancakes", price: "$16.90", desc: "Buttermilk, maple syrup, berries" },
+                    { name: "Breakfast Bowl", price: "$17.90", desc: "Eggs, spinach, chorizo, potato" },
+                    { name: "Bacon & Eggs", price: "$14.90", desc: "2 eggs, bacon, toast" },
+                    { name: "Veggie Breakfast", price: "$15.90", desc: "Vegan, mushrooms, tomato, spinach" }
+                ],
+                lunch: [
+                    { name: "Burgers", price: "$18.90-$22.90", desc: "Beef, chicken, fish options" },
+                    { name: "Salads", price: "$16.90-$19.90", desc: "Chicken, prawn, garden" },
+                    { name: "Fish & Chips", price: "$19.90", desc: "Fresh local catch, chips, salad" },
+                    { name: "Calamari", price: "$18.90", desc: "Crispy,aioli, salad" },
+                    { name: "Wraps", price: "$15.90", desc: "Chicken, beef, vegan" },
+                    { name: "Pasta", price: "$18.90-$21.90", desc: "Daily specials" }
+                ],
+                coffee: [
+                    { name: "Flat White", price: "$4.50" },
+                    { name: "Latte", price: "$4.50" },
+                    { name: "Cappuccino", price: "$4.50" },
+                    { name: "Long Black", price: "$4.00" },
+                    { name: "Mocha", price: "$5.00" },
+                    { name: "Iced Coffee", price: "$5.50" }
+                ],
+                drinks: [
+                    { name: "Fresh Juices", price: "$6.00", desc: "Orange, apple, tropical" },
+                    { name: "Smoothies", price: "$7.50", desc: "Berry, banana, mango" },
+                    { name: "Beer", price: "$8.50-$12", desc: "Local & imported" },
+                    { name: "Wine", price: "$10-$15", desc: "House & premium" }
+                ]
+            },
+            
+            faqs: {
+                "open": "🕐 Open 6:30am - Midnight, 7 days! ☀️",
+                "hours": "🕐 6:30am - Midnight, 7 days",
+                "location": "📍 415A Esplanade, Torquay — beachfront! 🌊",
+                "book": "🍽️ Book: " + "https://www.opentable.com.au/r/aquavue-cafe-restaurant-hervey-bay",
+                "vegan": "✅ Yes! We have vegan options — ask our staff",
+                "vegetarian": "✅ Yes! Many veggie choices",
+                "gluten": "✅ GF options available — please ask",
+                "kids": "👶 Yes! Kids menu available",
+                "dogs": "🐕 Well-behaved dogs welcome outside!",
+                "function": "📞 Yes! Call 07 4125 5528 for functions",
+                "parking": "🚗 Free parking on-site",
+                "wifi": "📶 Free WiFi for customers"
+            }
+        };
+        
+        let chatOpen = false;
+        
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatbot-window').style.display = chatOpen ? 'flex' : 'none';
+        }
+        
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendUserMessage();
+        }
+        
+        function sendMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = text;
+            messagesDiv.appendChild(userMsg);
+            
+            document.getElementById('typing').style.display = 'block';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            setTimeout(() => {
+                document.getElementById('typing').style.display = 'none';
+                getAIResponse(text);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 600);
+        }
+        
+        function sendUserMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (text) { sendMessage(text); input.value = ''; }
+        }
+        
+        function getAIResponse(userText) {
+            const messagesDiv = document.getElementById('messages');
+            const lowerText = userText.toLowerCase();
+            let response = "";
+            
+            // Breakfast
+            if (lowerText.includes('breakfast') || lowerText.includes('eggs') || lowerText.includes('pancakes') || lowerText.includes('avocado')) {
+                response = "🍳 BREAKFAST MENU<br><div class='menu-section'>";
+                businessConfig.menu.breakfast.forEach(item => {
+                    response += `<div class='menu-item'><span>${item.name}</span><span class='price'>${item.price}</span></div>`;
+                });
+                response += "</div>";
+            }
+            // Lunch
+            else if (lowerText.includes('lunch') || lowerText.includes('burger') || lowerText.includes('salad') || lowerText.includes('fish') || lowerText.includes('pasta')) {
+                response = "🥗 LUNCH MENU<br><div class='menu-section'>";
+                businessConfig.menu.lunch.forEach(item => {
+                    response += `<div class='menu-item'><span>${item.name}</span><span class='price'>${item.price}</span></div>`;
+                });
+                response += "</div>";
+            }
+            // Coffee
+            else if (lowerText.includes('coffee') || lowerText.includes('latte') || lowerText.includes('flat white') || lowerText.includes('mocha')) {
+                response = "☕ COFFEE MENU<br><div class='menu-section'>";
+                businessConfig.menu.coffee.forEach(item => {
+                    response += `<div class='menu-item'><span>${item.name}</span><span class='price'>${item.price}</span></div>`;
+                });
+                response += "</div>";
+            }
+            // Drinks
+            else if (lowerText.includes('drink') || lowerText.includes('juice') || lowerText.includes('beer') || lowerText.includes('wine') || lowerText.includes('alcohol')) {
+                response = "🍺 DRINKS<br><div class='menu-section'>";
+                businessConfig.menu.drinks.forEach(item => {
+                    response += `<div class='menu-item'><span>${item.name}</span><span class='price'>${item.price}</span></div>`;
+                });
+                response += "</div>";
+            }
+            // Full menu
+            else if (lowerText.includes('menu') && !lowerText.includes('show')) {
+                response = "🍽️ FULL MENU: <a href='https://www.aquavue.com.au/' target='_blank' style='color:#00a8e8'>aquavue.com.au</a><br><br>Or ask about: Breakfast, Lunch, Coffee, Drinks!";
+            }
+            // FAQ matches
+            else {
+                for (const [key, value] of Object.entries(businessConfig.faqs)) {
+                    if (lowerText.includes(key)) { response = value; break; }
+                }
+            }
+            
+            // Default responses
+            if (!response) {
+                if (lowerText.includes('thank')) response = "😊 You're welcome! See you at Aqua Vue! 🐋";
+                else if (lowerText.includes('bye')) response = "👋 Bye for now! 🌊";
+                else response = "🤔 Ask me about our hours, menu, or make a booking! 😊<br><br>Try: <em>What's for breakfast?</em> or <em>Book a table</em>";
+            }
+            
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message bot-message';
+            botMsg.innerHTML = response;
+            
+            // Quick replies
+            const qrDiv = document.createElement('div');
+            qrDiv.className = 'quick-replies';
+            qrDiv.style.marginTop = '12px';
+            ['🍳 Breakfast', '🥗 Lunch', '☕ Coffee', '📋 Book'].forEach(qr => {
+                const span = document.createElement('span');
+                span.className = 'quick-reply';
+                span.textContent = qr;
+                span.onclick = () => sendMessage(qr);
+                qrDiv.appendChild(span);
+            });
+            botMsg.appendChild(qrDiv);
+            
+            messagesDiv.appendChild(botMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
