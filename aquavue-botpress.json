@@ -90,7 +90,7 @@
     {
       "name": "FullMenu",
       "nodes": [{"id": "fullmenu_node", "onEnter": [
-        {"action": "createCard", "text": "📄 Full Menu: https://www.aquavue.com.au/"}
+        {"action": "createCard", "text": "📄 Full Menu: https://www.aquavue.com.au/menu"}
       ]}],
     {
       "name": "Order",
