@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Vue AI Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --aqua: #00a8e8;
+            --aqua-dark: #007ea7;
+            --bg-dark: #0d0d1a;
+            --bg-card: #161625;
+            --border: #2d2d44;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0,168,232,0.2);
+            border: 1px solid var(--border);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--aqua), var(--aqua-dark));
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        
+        .status {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .bot {
+            color: #ffffff;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+        
+        .user {
+            background: linear-gradient(135deg, var(--aqua), var(--aqua-dark));
+            color: white;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+        }
+        
+        .typing {
+            display: none;
+            padding: 12px 16px;
+            background: var(--bg-dark);
+            border-radius: 18px;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .typing span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--aqua);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: bounce 1.4s infinite;
+        }
+        
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .input-area {
+            padding: 15px;
+            background: var(--bg-dark);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .input-area input {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .input-area input:focus {
+            border-color: var(--aqua);
+        }
+        
+        .input-area button {
+            background: linear-gradient(135deg, var(--aqua), var(--aqua-dark));
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        
+        .input-area button:hover {
+            transform: scale(1.05);
+        }
+        
+        .input-area button svg {
+            width: 22px;
+            height: 22px;
+            fill: white;
+        }
+        
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 20px 15px;
+        }
+        
+        .suggestion {
+            background: var(--bg-dark);
+            border: 1px solid var(--aqua);
+            color: var(--aqua);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .suggestion:hover {
+            background: var(--aqua);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌊 RideAll</h1>
+            <p>Hervey Bay's Premium Tesla Chauffeur</p>
+            <span class="status">🚗 AI Assistant Online</span>
+            <p style="margin-top:10px;font-size:12px;opacity:0.8;">💬 Click suggestions below or type to chat!</p>
+        </div>
+        
+        <div class="messages" id="messages">
+            <div class="message bot">
+                👋 Hey! Welcome to RideAll! 🚗🔌
+                <br><br>
+                I'm your AI assistant — I can help you with:
+                <br>• Airport transfers
+                <br>• Pricing & booking
+                <br>• Areas we cover
+                <br>• Corporate accounts
+                <br>• Anything else!
+                <br><br>
+                What would you like to know? 😊
+            </div>
+        </div>
+        
+        <div class="typing" id="typing">
+            <span></span><span></span><span></span>
+        </div>
+        
+        <div class="suggestions">
+            <span class="suggestion" onclick="ask('Airport transfer pricing')">✈️ Pricing</span>
+            <span class="suggestion" onclick="ask('Book a ride')">🚗 Book Ride</span>
+            <span class="suggestion" onclick="ask('What areas do you cover?')">📍 Areas</span>
+            <span class="suggestion" onclick="ask('Do you track flights?')">✈️ Flight Tracking</span>
+            <span class="suggestion" onclick="ask('Corporate account')">💼 Corporate</span>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" id="input" placeholder="Ask me anything..." onkeypress="handleKey(event)">
+            <button onclick="send()">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const messages = document.getElementById('messages');
+        const input = document.getElementById('input');
+        const typing = document.getElementById('typing');
+        
+        // Aqua Vue business info
+        const info = {
+            name: "RideAll",
+            address: "415A Esplanade, Torquay, Hervey Bay QLD 4655",
+            phone: "07 4125 5528",
+            hours: "6:30am - Midnight, 7 days a week",
+            website: "https://www.aquavue.com.au/menu",
+            booking: "https://www.aquavue.com.au/reservations"
+        };
+        
+        // Smart response logic
+        function getAIResponse(userMsg) {
+            const msg = userMsg.toLowerCase();
+            
+            // Hours
+            if (msg.includes('hour') || msg.includes('open') || msg.includes('time')) {
+                return `🕐 We're open **6:30am - Midnight, 7 days a week**! 
+<br><br>
+<a href="tel:07 4125 5528">📞 Call: 07 4125 5528</a>
+<br><br>
+Come in anytime — we'd love to see you! ☀️`;
+            }
+            
+            // Location
+            if (msg.includes('location') || msg.includes('address') || msg.includes('where')) {
+                return `📍 **Aqua Vue**
+<br>415A Esplanade, Torquay, Hervey Bay QLD 4655
+<br><br>
+🌊 Beachfront location — stunning views!
+<br><br>
+<a href="https://maps.google.com/?q=Aqua+Vue+Hervey+Bay" target="_blank" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📍 Open in Maps</a>
+<a href="tel:07 4125 5528" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px 0;">📞 Call</a>`;
+            }
+            
+            // Menu
+            if (msg.includes('menu') || msg.includes('food') || msg.includes('eat')) {
+                return `🍽️ We serve breakfast, lunch & dinner!
+<br><br>
+**Some favourites:**
+<br>• Big Breakfast — $22.90
+<br>• Avocado Smash — $18.90
+<br>• Flat White — $4.50
+<br>• Fresh juices — $6.00
+<br><br>
+<a href="https://www.aquavue.com.au/menu" target="_blank">View full menu</a>`;
+            }
+            
+            // Booking
+            if (msg.includes('book') || msg.includes('reservation') || msg.includes('table')) {
+                return `📅 Book a table now! 🌊
+<br><br>
+<a href="https://www.aquavue.com.au/reservations" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin:10px 0;">📅 Book Now on Website</a>
+<br><br>
+Or call us on **07 4125 5528**
+<br><br>
+How many people would you like to book for?`;
+            }
+            
+            // Vegan/vegetarian
+            if (msg.includes('vegan') || msg.includes('vegetarian') || msg.includes('gluten') || msg.includes('gf')) {
+                return `🌱 Yes! We cater for everyone:
+<br>• Vegan bread available
+<br>• GF options
+<br>• Oat milk (+$0.50)
+<br>• Fresh salads & juices
+<br><br>
+Just let our staff know! ✅`;
+            }
+            
+            // Coffee
+            if (msg.includes('coffee') || msg.includes('latte') || msg.includes('cappuccino')) {
+                return `☕ From Seven Miles Coffee!
+<br><br>
+• Flat White — $4.50
+<br>• Latte — $4.50
+<br>• Cappuccino — $4.50
+<br>• Iced Latte — $5.50
+<br><br>
+Want one? Come on in! 🐋`;
+            }
+            
+            // Contact
+            if (msg.includes('contact') || msg.includes('phone') || msg.includes('call')) {
+                return `📞 Contact Us
+<br><br>
+<a href="tel:07 4125 5528" style="background:#00a8e8;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📞 07 4125 5528</a>
+<br><br>
+<a href="mailto:team@aquavue.com.au" style="background:#007ea7;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">📧 Email Us</a>
+<br><br>
+<a href="https://www.aquavue.com.au/menu" target="_blank" style="background:#10b981;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;display:inline-block;margin:5px;">🌐 Visit Website</a>`;
+            }
+            
+            // Prices/cost
+            if (msg.includes('price') || msg.includes('cost') || msg.includes('how much')) {
+                return `💰 Some of our popular prices:
+<br>• Breakfast from $14.90
+<br>• Coffee from $4.00
+<br>• Fresh juices from $6.00
+<br>• Smoothies — $7.50
+<br><br>
+Check our <a href="https://www.aquavue.com.au/menu" target="_blank">full menu</a> for everything!`;
+            }
+            
+            // Parking
+            if (msg.includes('parking') || msg.includes('park')) {
+                return `🚗 **Free parking** on-site! 
+<br><br>
+Easy access and plenty of spots near the beach — just pull right up! 🏖️`;
+            }
+            
+            // WiFi
+            if (msg.includes('wifi') || msg.includes('internet') || msg.includes('wi-fi')) {
+                return `📶 Yes! **Free WiFi** for all customers!
+<br><br>
+Password: ask our staff 👋`;
+            }
+            
+            // Pet friendly
+            if (msg.includes('pet') || msg.includes('dog') || msg.includes('cat') || msg.includes('animal')) {
+                return `🐕 Yes! Dogs welcome on lead in our outdoor area!
+<br><br>
+Bring your furry friend — they can enjoy the beach with you! 🐋`;
+            }
+            
+            // Kids
+            if (msg.includes('kid') || msg.includes('child') || msg.includes('family')) {
+                return `👶 Yes! Kids are welcome!
+<br><br>
+We have a kids menu available — perfect for the whole family! 💫`;
+            }
+            
+            
+            // RideAll - Airport Pricing
+            if (msg.includes('price') || msg.includes('cost') || msg.includes('how much') || msg.includes('pricing')) {
+                return `💰 Airport Transfer Pricing
+<br><br>
+🚗 Hervey Bay Airport from $45
+<br>✈️ Brisbane Airport from $120
+<br>🏥 Hospital transfers from $35
+<br>🛥️ Fraser Island from $55
+<br><br>
+<a href="https://customer.moovs.app/rideall/new/info" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;">🚗 Book Now</a>
+<br><br>
+Or call us for a quote!`;
+            }
+
+            // RideAll - Areas
+            if (msg.includes('area') || msg.includes('cover') || msg.includes('where') || msg.includes('location')) {
+                return `📍 Areas We Cover
+<br><br>
+We service the whole Fraser Coast!
+<br>• Hervey Bay
+<br>• Maryborough
+<br>• Urangan
+<br>• Torquay
+<br>• K'gari (Fraser Island) ferry terminals
+<br><br>
+Not sure if we cover your area? Just ask! 😊`;
+            }
+
+            // RideAll - Flight Tracking
+            if (msg.includes('flight') || msg.includes('track') || msg.includes('delayed') || msg.includes('delay')) {
+                return `✈️ Flight Tracking — Yes!
+<br><br>
+We track your flight in real-time!
+<br><br>
+If your flight is delayed, we already know — no need to stress. We'll be there when you land, not just when we think you will. 🛫`;
+            }
+
+            // RideAll - Corporate
+            if (msg.includes('corporate') || msg.includes('business') || msg.includes('account') || msg.includes('client')) {
+                return `💼 Corporate Accounts
+<br><br>
+Yes! We offer corporate billing for regular travelers.
+<br><br>
+• No per-ride payments
+<br>• Regular monthly invoicing
+<br>• Priority booking
+<br>• Professional Tesla fleet
+<br><br>
+<a href="https://rideall.com.au" target="_blank">📧 Email us</a> to set up your corporate account!`;
+            }
+
+            // RideAll - Tesla
+            if (msg.includes('tesla') || msg.includes('car') || msg.includes('vehicle')) {
+                return `🔌 Our Tesla Fleet
+<br><br>
+We only use Tesla vehicles — clean, quiet, fully electric!
+<br><br>
+• No petrol smell
+<br>• Super comfortable
+<br>• Always clean & ready
+<br><br>
+The Tesla experience — make your journey part of the trip! 🏎️`;
+            }
+
+            // RideAll - Booking
+            if (msg.includes('book') || msg.includes('ride') || msg.includes('transfer') || msg.includes('reserve')) {
+                return `🚗 Book a Ride with RideAll!
+<br><br>
+Easy booking — takes 2 minutes!
+<br>• No account needed
+<br>• Instant confirmation
+<br>• We track your flight for airport runs
+<br><br>
+<a href="https://customer.moovs.app/rideall/new/info" target="_blank" style="background:#00a8e8;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin:10px 0;">🚗 Book Now</a>
+<br><br>
+Or call us!`;
+            }
+// Default AI-like response
+            return `Thanks for asking! 😊
+<br><br>
+I'm here to help with anything about Aqua Vue — menu, hours, bookings, or just to say g'day!
+<br><br>
+What else would you like to know?`;
+        }
+        
+        function ask(text) {
+            input.value = text;
+            send();
+        }
+        
+        function handleKey(e) {
+            if (e.key === 'Enter') send();
+        }
+        
+        function send() {
+            const text = input.value.trim();
+            if (!text) return;
+            
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+            
+            // Show typing
+            typing.style.display = 'block';
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Simulate AI thinking delay
+            setTimeout(() => {
+                typing.style.display = 'none';
+                const response = getAIResponse(text);
+                addMessage(response, 'bot');
+            }, 1000 + Math.random() * 1000);
+        }
+        
+        function addMessage(text, type) {
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
