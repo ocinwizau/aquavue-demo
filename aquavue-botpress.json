@@ -14,7 +14,7 @@
           "actions": [
             {"action": "createQuickReply", "buttons": [
               {"label": "📍 Location & Hours", "flow": "Location"},
-              {"label": "🍽️ View Menu", "flow": "Menu"},
+              {"label": "🍽️ View Menu", "url": "https://www.aquavue.com.au/menu"},
               {"label": "🛒 Order Now", "flow": "Order"},
               {"label": "📅 Book a Table", "flow": "Book"},
               {"label": "☕ Today's Special", "flow": "Special"},
