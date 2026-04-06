@@ -117,3 +117,11 @@ See full plan in: `/root/.openclaw/workspace/facebook-growth-plan.md`
 - Tomorrow 6:30pm AEST — Engagement
 
 **Content pillars to rotate:** Supermarket deals → Money hacks → Community questions → Viral → Local spotlight
+
+**Top Creator Tactics Implemented:**
+- Every post: Hook + specific $ amount + urgency + local angle + CTA
+- Viral formulas: POV, Comparison, Hacks, Relatable, Giveaway tease
+- Post more as we grow: 3x → 5x → 7x daily
+- Reply to ALL comments within 1 hour
+- Cross-post to Facebook groups daily
+- Build local community (Hervey Bay focus)
