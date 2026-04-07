@@ -250,13 +250,7 @@
     </div>
 
     <script>
-        // ═══════════════════════════════════════════════════════
-        // 🔑 PASTE YOUR GEMINI API KEY BELOW (free from ai.google.dev)
-        // ═══════════════════════════════════════════════════════
-        
-        const GEMINI_API_KEY = ""; // ← Paste your key here (starts with AIza...)
-        
-        // ═══════════════════════════════════════════════════════
+        const GEMINI_API_KEY = "AIzaSyBmOfE5hdzfVmmW4uDEbzVCqMmpVetMUWI";
         
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
@@ -264,14 +258,12 @@
         const status = document.getElementById('status');
         const apiBanner = document.getElementById('apiBanner');
         
-        // Check if API key is set
         if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === "") {
             apiBanner.classList.add('show');
             status.classList.add('offline');
             status.textContent = "🤖 Using Fallback Mode";
         }
         
-        // Marina's system prompt
         const SYSTEM_PROMPT = `You are Marina, the friendly AI assistant for Aqua Vue Cafe — a beachfront cafe in Hervey Bay, Queensland, Australia. 
 
 PERSONALITY:
@@ -314,7 +306,6 @@ RESPONSE RULES:
 - Use line breaks and emojis for readability
 - Include relevant links when helpful`;
         
-        // Fallback responses (used when no API key)
         const FALLBACK_RESPONSES = {
             hours: `🕐 We're open:<br><br>
 • Breakfast: 7am - 11am<br>
@@ -357,7 +348,7 @@ What else would you like to know?`;
         }
         
         async function callGemini(userMessage) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             
             const requestBody = {
                 contents: [{
@@ -384,7 +375,6 @@ What else would you like to know?`;
                     return data.candidates[0].content.parts[0].text;
                 }
                 
-                // Handle errors
                 if (data.error) {
                     console.error("Gemini API error:", data.error);
                     return null;
@@ -398,19 +388,16 @@ What else would you like to know?`;
         }
         
         async function getAIResponse(userMessage) {
-            // If no API key, use fallback
             if (!GEMINI_API_KEY || GEMINI_API_KEY.trim() === "") {
                 return getFallbackResponse(userMessage);
             }
             
-            // Try Gemini API
             const aiResponse = await callGemini(userMessage);
             
             if (aiResponse) {
                 return aiResponse.replace(/\n/g, '<br>');
             }
             
-            // If API fails, use fallback
             console.log("API failed, using fallback");
             return getFallbackResponse(userMessage);
         }
@@ -428,15 +415,12 @@ What else would you like to know?`;
             const text = input.value.trim();
             if (!text) return;
             
-            // Add user message
             addMessage(text, 'user');
             input.value = '';
             
-            // Show typing
             typing.style.display = 'block';
             messages.scrollTop = messages.scrollHeight;
             
-            // Get AI response
             try {
                 const response = await getAIResponse(text);
                 typing.style.display = 'none';
