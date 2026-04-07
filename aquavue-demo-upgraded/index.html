@@ -250,7 +250,7 @@
     </div>
 
     <script>
-        const GEMINI_API_KEY = "AIzaSyBmOfE5hdzfVmmW4uDEbzVCqMmpVetMUWI";
+        const GEMINI_API_KEY = "AIzaSyCeCuLH1QnhjyZ4qVSmRCqg33VB2116a68";
         
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
@@ -348,7 +348,7 @@ What else would you like to know?`;
         }
         
         async function callGemini(userMessage) {
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
             
             const requestBody = {
                 contents: [{
@@ -365,7 +365,11 @@ What else would you like to know?`;
             try {
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'cors',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
                     body: JSON.stringify(requestBody)
                 });
                 
