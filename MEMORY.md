@@ -129,14 +129,11 @@ See full plan in: `/root/.openclaw/workspace/facebook-growth-plan.md`
 **Posting:** 3x per day (7:30am, 12pm, 6:30pm AEST)
 **Today's Posts:** Done ✅
 
-**NEW WEEKLY SCHEDULE (Starting now):**
-- MONDAY — Grocery Price Comparison Day
-- TUESDAY — Kmart/Big W Clearance Day
-- WEDNESDAY — Family Feed Under $X Day
-- THURSDAY — Local Hervey Bay Spotlight Day
-- FRIDAY — Weekly Deals Roundup Day
-- SATURDAY — Viral/Relatable Content Day
-- SUNDAY — Recap + Motivation Day
+**TODAY IS TUESDAY April 7, 2026**
+**Tomorrow (Wednesday) starts the NEW schedule:**
+
+**STARTING WEDNESDAY April 8:**
+- WEDNESDAY — Family Feed Under $X Day 🍽️ (first day of new schedule!)
 
 **Content pillars:** Kmart/Big W Clearance | Grocery Price Comparisons | Family Feed Under $X
 
