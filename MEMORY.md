@@ -129,12 +129,16 @@ See full plan in: `/root/.openclaw/workspace/facebook-growth-plan.md`
 **Posting:** 3x per day (7:30am, 12pm, 6:30pm AEST)
 **Today's Posts:** Done ✅
 
-**Next posting times:**
-- Tomorrow 7:30am AEST — Morning deal
-- Tomorrow 12pm AEST — Tip/hack
-- Tomorrow 6:30pm AEST — Engagement
+**NEW WEEKLY SCHEDULE (Starting now):**
+- MONDAY — Grocery Price Comparison Day
+- TUESDAY — Kmart/Big W Clearance Day
+- WEDNESDAY — Family Feed Under $X Day
+- THURSDAY — Local Hervey Bay Spotlight Day
+- FRIDAY — Weekly Deals Roundup Day
+- SATURDAY — Viral/Relatable Content Day
+- SUNDAY — Recap + Motivation Day
 
-**Content pillars to rotate:** Supermarket deals → Money hacks → Community questions → Viral → Local spotlight
+**Content pillars:** Kmart/Big W Clearance | Grocery Price Comparisons | Family Feed Under $X
 
 **Top Creator Tactics Implemented:**
 - Every post: Hook + specific $ amount + urgency + local angle + CTA
