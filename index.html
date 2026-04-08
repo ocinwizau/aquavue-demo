@@ -254,7 +254,7 @@
         // 🔑 PASTE YOUR GEMINI API KEY BELOW (free from ai.google.dev)
         // ═══════════════════════════════════════════════════════
         
-        const GEMINI_API_KEY = "AIzaSyCoYZagO6dIZr3lJfOUjbtR1DVbrNkZpp4";
+        const GEMINI_API_KEY = "AIzaSyAoPexvnqPYBsymz_3oTMMuVmW4xi5w6cY";
         
         // ═══════════════════════════════════════════════════════
         
@@ -357,7 +357,7 @@ What else would you like to know?`;
         }
         
         async function callGemini(userMessage) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
             
             const requestBody = {
                 contents: [{
