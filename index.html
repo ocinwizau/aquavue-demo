@@ -462,7 +462,7 @@ footer { border-top: 1px solid var(--border); padding: 48px 24px; text-align: ce
  <li>Updates within 48hrs when your info changes</li>
  <li>No lock-in contract — cancel anytime</li>
  </ul>
- <a href="#signup" class="btn-primary" style="width:100%; text-align:center; display:block;">Get Started for $199 →</a>
+ <a href="https://square.link/u/vzJdZjvi" target="_blank" class="btn-primary" style="width:100%; text-align:center; display:block;">Get Started for $199 →</a>
  <p class="pricing-note">$199 setup today · then $99/month · cancel anytime</p>
  </div>
 </div>
@@ -575,7 +575,7 @@ footer { border-top: 1px solid var(--border); padding: 48px 24px; text-align: ce
  <div class="footer-links">
  <a href="#industries">See Examples</a>
  <a href="#pricing">Pricing</a>
- <a href="#signup">Get Started</a>
+ <a href="https://square.link/u/vzJdZjvi" target="_blank">Get Started</a>
  <a href="https://aquavue-final.vercel.app" target="_blank">Live Demo</a>
  </div>
  <p style="font-size:12px;margin-top:16px;">© 2026 ChatLocal AI · Hervey Bay, QLD · Built with 🤖 & ☕</p>
@@ -600,13 +600,27 @@ function submitForm() {
  alert('Please fill in the required fields (marked with *).');
  return;
  }
- document.getElementById('formWrap').style.display = 'none';
- document.getElementById('successMsg').style.display = 'block';
- // TODO: Connect to Formspree or EmailJS to receive signups in your email
- console.log('New lead:', {
- name, email, biz, type,phone: document.getElementById('phone').value,
+ // Submit to Formspree
+ fetch('https://formspree.io/f/mreowlag', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({
+ name: name,
+ email: email,
+ biz: biz,
+ type: type,
+ phone: document.getElementById('phone').value,
  website: document.getElementById('website').value,
  notes: document.getElementById('notes').value
+ })
+ })
+ .then(response => {
+ document.getElementById('formWrap').style.display = 'none';
+ document.getElementById('successMsg').style.display = 'block';
+ })
+ .catch(error => {
+ alert('Something went wrong. Please try again.');
+ console.error('Formspree error:', error);
  });
 }
 </script>
