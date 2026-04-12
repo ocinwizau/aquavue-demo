@@ -13,14 +13,13 @@
 - Used for: Voice messages to Nico, storytelling, announcements
 
 ## Facebook (QLD Deals)
-- **Page Access Token:** EAA9Vn1B0fQEBRER1eEiSOYzZC1hWdx2ASjhZBplOLTvwxg0Wo2DlOdGBV1UbQe2yGZADLasRLpOk2LI8aJZCBsSOj8HFVyWE3ti67V9R3z7vvC3RmmQPGbiuXoZBHjusruu85XTL1OPHGXUqpo8JQNpiO8084sI6eNuDkC66ARk3Mw5gJItZAqkPphfZB6Y2Wf0DqmVfG7ILSLUB9Hb1teaBf3fJAsmGDsHDWqSneZBcwWK5tMBliwZDZD
-- **Page ID:** QLD Deals and Savings
-- **Status:** To be configured
+- **Page Access Token:** EAA9Vn1B0fQEBRG53vKLvLP4XR97OZBJZCa1GMKWISel35ea33Xzkg6ZBabUULwbvNNBL76wKCBSbZAT7kiPBprw5oLaHFmh6BUDaOlBdAFXwiLxF7jH8s0v0adSAmMGB5h9UHiLKuZA9MhJbQkaAfHNCVduL3Av9elJmopRyJkbC7SZBykk4ZBHaUYnwUNZAU6XnBsn7C0IG
+- **Page ID:** 1107085552479301
+- **Status:** ✅ Working
 
 ## Live Demos
 - **ChatLocal AI Landing:** https://chatlocalai.vercel.app/ (Formspree + Square)
 - **ChatLocal AI (alt):** https://chatlocal-ai.vercel.app/
 - **Aqua Vue Chatbot v2:** https://aquavue-v2.vercel.app/ (Marina AI Assistant - powered by Groq)
-
 ## Vercel
-- **Token:** vcp_7mKZzSaBKLKcvYXPYh68NqYH3bpNSkMomFV8c7rwpRmve6pQR73HMTIK
+- **Token:** 
