@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-12T11:06:35.282Z",
+  "entries": {
+    "memory:memory/2026-04-10.md:1:39": {
+      "key": "memory:memory/2026-04-10.md:1:39",
+      "path": "memory/2026-04-10.md",
+      "startLine": 1,
+      "endLine": 39,
+      "source": "memory",
+      "snippet": "# 2026-04-10 — Daily Notes ## Session Start: Uno meets Nico ### About Nico - **Name:** Nico Gacasa - **Location:** Brisbane (QLD) - **Main Goal:** Build sidehustle generating $2k+/month → potentially full-time income - **Current Focus:** Chatbot builds (AI chatbots for businesses) - **Open to:** Other business ideas that come up ### Modes (what Nico uses Uno for) 1. **Content Creator** — QLD Deals daily posts 2. **AI Chatbot Builder** — Aqua Vue + custom chatbots 3. **Strategist** — Automation & systems planning ### Tools & Accounts Saved - **Facebook:** Page \"QLD Deals and Savings\" + Access Token saved in TOOLS.md - **GitHub:** github.com/ocinwizau (token: ghp_VEqyw9pGJAlgHjr6WK12WWExqi",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1.0822031056246793,
+      "maxScore": 0.6108219802272677,
+      "firstRecalledAt": "2026-04-12T07:48:52.050Z",
+      "lastRecalledAt": "2026-04-12T11:06:35.282Z",
+      "queryHashes": [
+        "0396eb785633",
+        "138e2a3e03b7"
+      ],
+      "recallDays": [
+        "2026-04-12"
+      ],
+      "conceptTags": [
+        "full-time",
+        "tools.md",
+        "github.com/ocinwizau",
+        "ghp-veqyw9pgjalghjr6wk12wwexqi",
+        "start",
+        "meets",
+        "nico",
+        "name"
+      ]
+    },
+    "memory:memory/2026-04-10.md:34:72": {
+      "key": "memory:memory/2026-04-10.md:34:72",
+      "path": "memory/2026-04-10.md",
+      "startLine": 34,
+      "endLine": 72,
+      "source": "memory",
+      "snippet": "- QLD Deals cron jobs will search for Woolworths/Coles/Bunnings deals and post to Facebook - ChatLocal AI is the landing page product — needs hardening before selling (API key exposure) - First 3 paying clients → will invest in hardening the chatbot product ## End of Session Notes - Set up daily QLD Deals content posting (3x daily) - Deployed ChatLocal AI landing page to Vercel - Saved all credentials in TOOLS.md - Created GitHub repo for ChatLocal (kiki) --- ## Later Session Updates ### ChatLocal AI Landing Page Updates - Added Formspree integration (submits to nicholjohngacasaau@gmail.com) - Added Square payment link (https://square.link/u/vzJdZjvi) - Pricing button now opens Square in",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1.1789624469215725,
+      "maxScore": 0.5894812234607862,
+      "firstRecalledAt": "2026-04-12T07:48:52.050Z",
+      "lastRecalledAt": "2026-04-12T11:06:35.282Z",
+      "queryHashes": [
+        "0396eb785633",
+        "138e2a3e03b7"
+      ],
+      "recallDays": [
+        "2026-04-12"
+      ],
+      "conceptTags": [
+        "woolworths/coles/bunnings",
+        "tools.md",
+        "gmail.com",
+        "square.link/u/vzjdzjvi",
+        "qld",
+        "deals",
+        "cron",
+        "jobs"
+      ]
+    },
+    "memory:memory/2026-04-10.md:64:88": {
+      "key": "memory:memory/2026-04-10.md:64:88",
+      "path": "memory/2026-04-10.md",
+      "startLine": 64,
+      "endLine": 88,
+      "source": "memory",
+      "snippet": "### Current State (1:44pm UTC, April 10) - ChatLocal AI landing ready for business use - Formspree → emails you new leads - Square → $199 payment link working - All config files saved in workspace ### Subagent for 2nd Telegram Bot (Attempted) - Nico asked to spawn a subagent for his 2nd Telegram bot - Attempt crashed during spawning - Need to retry: what bot does he want? (QLD Deals? ChatLocal? Custom?) ### Session End (10:12 PM UTC) - ChatLocal AI landing page fully functional - Working URLs: chatlocalai.vercel.app, chatlocal-ai.vercel.app - Formspree + Square payment working - GitHub repo: github.com/ocinwizau/kiki - Still need to: retry spawning subagent for 2nd Telegram bot ### Facebo",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.5132683136213946,
+      "maxScore": 0.5132683136213946,
+      "firstRecalledAt": "2026-04-12T07:48:52.050Z",
+      "lastRecalledAt": "2026-04-12T07:48:52.050Z",
+      "queryHashes": [
+        "0396eb785633"
+      ],
+      "recallDays": [
+        "2026-04-12"
+      ],
+      "conceptTags": [
+        "chatlocalai.vercel.app",
+        "chatlocal-ai.vercel.app",
+        "github.com/ocinwizau/kiki",
+        "current",
+        "state",
+        "44pm",
+        "utc",
+        "april"
+      ]
+    }
+  }
+}

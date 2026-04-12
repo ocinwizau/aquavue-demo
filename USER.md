@@ -21,9 +21,10 @@ Build a business/sidehustle generating at least $2k AUD/month as another source 
 ## Current Mode: Chatbot Builder
 
 - Building AI chatbots for local businesses
-- Have live demo: https://aquavue-v2.vercel.app/
-- ChatLocal AI landing page: https://deploy-lovat-ten-13.vercel.app/
-- Ready to demo to prospects
+- Live demos:
+  - Aqua Vue Chatbot: https://aquavue-v2.vercel.app/
+  - ChatLocal AI Landing: https://chatlocalai.vercel.app/
+- Looking for first clients!
 
 _(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
 

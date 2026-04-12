@@ -9,3 +9,15 @@ You have conversation history in your sessions but no memory file yet. On your n
 3. Keep this file updated after every meaningful conversation
 
 **This file is how you remember. If it is empty, you do not have long-term memory. Fix that now.**
+
+## Facebook Posting Success (April 2026)
+- QLD Deals page now posting successfully!
+- Token working: EAA9Vn1B0fQEBRG53vKLvLP4XR97OZBJZCa1GMKWIS...
+- Posted with images from Unsplash (generic grocery/DIY photos)
+- 3 posts: Woolworths, Coles, Bunnings deals
+- Page ID: 1107085552479301
+
+## ChatLocal AI Landing
+- Live URL: https://chatlocalai.vercel.app
+- Formspree + Square payment working
+- GitHub repo: github.com/ocinwizau/kiki
